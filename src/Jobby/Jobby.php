@@ -1,15 +1,15 @@
 <?php
 
-namespace Jobby;
-
-use Jobby\Helper;
-use Jobby\Exception;
+require 'Helper.php';
+require 'Exception.php';
 
 /**
  *
  */
 class Jobby
 {
+	const DS = DIRECTORY_SEPARATOR;
+	
     /**
      * @var array
      */
@@ -38,7 +38,19 @@ class Jobby
         $this->setConfig($this->getDefaultConfig());
         $this->setConfig($config);
 
-        $this->script = __DIR__ . DIRECTORY_SEPARATOR . 'BackgroundJob.php';
+        $this->script = __DIR__ . self::DS . 'BackgroundJob.php';
+        
+        $contents = file_get_contents(__DIR__.'/jobs');
+        $this->jobs = unserialize($contents);
+        
+    }
+    
+    public function __destruct()
+    {
+    	//echo 'Count is -: '.count($this->jobs);
+		$contents = serialize($this->jobs);
+		file_put_contents(__DIR__.'/jobs', $contents);
+		
     }
 
     /**
@@ -74,6 +86,16 @@ class Jobby
             'enabled' => true,
             'debug' => false,
         );
+    }
+    
+    public function getJobs($name=null)
+    {
+    	if($name)
+    	{
+    		return isset($this->jobs[$name]) ? $this->jobs[$name] : false;
+    	}
+    	
+    	return $this->jobs;
     }
 
     /**

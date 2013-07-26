@@ -1,11 +1,10 @@
 <?php
 
-namespace Jobby;
 
-use Jobby\Helper;
-use Jobby\Exception;
-use Jobby\InfoException;
-use Cron\CronExpression;
+require 'Helper.php';
+require 'Exception.php';
+require 'InfoException.php';
+require 'Cron\CronExpression.php';
 
 /**
  *
